@@ -1,4 +1,5 @@
 const Erc20Token = artifacts.require("Erc20Token");
+const Sale = artifacts.require("Sale");
 
 module.exports = function (deployer) {
   const tokenName = "Done";
