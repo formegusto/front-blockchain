@@ -15,3 +15,5 @@ module.exports = async function (deployer, network, accounts) {
   const DOToken = await Erc20Token.deployed();
   deployer.deploy(Sale, 1, accounts[0], DOToken.address);
 };
+
+// truffle migrate --reset
