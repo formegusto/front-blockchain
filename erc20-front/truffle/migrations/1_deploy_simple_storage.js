@@ -13,7 +13,22 @@ module.exports = async function (deployer, network, accounts) {
   deployer.deploy(Erc20Token, tokenName, tokenSymbol, totalSupply);
 
   const DOToken = await Erc20Token.deployed();
-  deployer.deploy(Sale, 1, accounts[0], DOToken.address);
+  const hardCap = web3.utils.toWei("10", "ether");
+
+  let openingTime = new Date(2022, 11, 6, 15, 40, 00);
+  openingTime = Math.floor(openingTime.getTime() / 1000);
+  let closingTime = new Date(2022, 11, 6, 15, 45, 00);
+  closingTime = Math.floor(closingTime.getTime() / 1000);
+
+  deployer.deploy(
+    Sale,
+    1,
+    accounts[0],
+    DOToken.address,
+    hardCap,
+    openingTime,
+    closingTime
+  );
 };
 
 // truffle migrate --reset
