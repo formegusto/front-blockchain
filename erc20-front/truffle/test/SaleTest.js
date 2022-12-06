@@ -25,7 +25,7 @@ contract("Sale Test", async (accounts) => {
 
     let openingTime = new Date(2022, 11, 6, 15, 40, 00);
     openingTime = Math.floor(openingTime.getTime() / 1000);
-    let closingTime = new Date(2022, 11, 6, 15, 45, 00);
+    let closingTime = new Date(2022, 12, 6, 15, 45, 00);
     closingTime = Math.floor(closingTime.getTime() / 1000);
     saleInstance = await Sale.new(
       1,
@@ -33,7 +33,8 @@ contract("Sale Test", async (accounts) => {
       erc20TokenInstance.address,
       hardCap,
       openingTime,
-      closingTime
+      closingTime,
+      deployer
     );
   });
 
@@ -48,14 +49,18 @@ contract("Sale Test", async (accounts) => {
     현재 Sale Smart Contract에 DOne Token이 없기 때문에 나타나는 에러
     */
 
-    await erc20TokenInstance.transfer(
-      saleInstance.address,
-      web3.utils.toWei("10", "ether"),
-      {
-        from: deployer,
-      }
-    );
+    // await erc20TokenInstance.transfer(
+    //   saleInstance.address,
+    //   web3.utils.toWei("10", "ether"),
+    //   {
+    //     from: deployer,
+    //   }
+    // );
 
+    await erc20TokenInstance.approve(
+      saleInstance.address,
+      web3.utils.toWei("10", "ether")
+    );
     await saleInstance.addMyWhitelist(buyer, { from: deployer });
     const isBuyerInMyWhitelist = await saleInstance.myWhitelist(buyer);
     expect(isBuyerInMyWhitelist).to.be.equal(true);
@@ -76,7 +81,13 @@ contract("Sale Test", async (accounts) => {
       web3.utils.toWei("1", "ether")
     );
     expect(WalletBalanceOfDOneToken).to.be.bignumber.equal(
-      web3.utils.toWei("106", "ether")
+      web3.utils.toWei("109", "ether")
+    );
+
+    // await saleInstance.withDraw({ from: deployer });
+    const deployerBalance = await erc20TokenInstance.balanceOf(deployer);
+    expect(deployerBalance).to.be.bignumber.equal(
+      web3.utils.toWei("9", "ether")
     );
   });
 });

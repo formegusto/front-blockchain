@@ -38,6 +38,9 @@ contract Crowdsale is Context, ReentrancyGuard {
     // Amount of wei raised
     uint256 private _weiRaised;
 
+    // deployer's address
+    address private _deployer;
+
     /**
      * Event for token purchase logging
      * @param purchaser who paid for the tokens
@@ -55,7 +58,7 @@ contract Crowdsale is Context, ReentrancyGuard {
      * @param wallet_ Address where collected funds will be forwarded to
      * @param token_ Address of the token being sold
      */
-    constructor (uint256 rate_, address payable wallet_, IERC20 token_)  {
+    constructor (uint256 rate_, address payable wallet_, IERC20 token_, address deployer_)  {
         require(rate_ > 0, "Crowdsale: rate is 0");
         require(wallet_ != address(0), "Crowdsale: wallet is the zero address");
         require(address(token_) != address(0), "Crowdsale: token is the zero address");
@@ -63,6 +66,7 @@ contract Crowdsale is Context, ReentrancyGuard {
         _rate = rate_;
         _wallet = wallet_;
         _token = token_;
+        _deployer = deployer_;
     }
 
     /**
@@ -160,7 +164,8 @@ contract Crowdsale is Context, ReentrancyGuard {
      * @param tokenAmount Number of tokens to be emitted
      */
     function _deliverTokens(address beneficiary, uint256 tokenAmount) internal virtual{
-        _token.safeTransfer(beneficiary, tokenAmount);
+        // _token.safeTransfer(beneficiary, tokenAmount);
+        _token.safeTransferFrom(_deployer,beneficiary, tokenAmount);
     }
 
     /**

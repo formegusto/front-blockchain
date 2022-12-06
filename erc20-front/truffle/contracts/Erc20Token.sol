@@ -9,6 +9,7 @@ contract Erc20Token is ERC20 {
         string memory _symbol,
         uint256 _totalSupply
     ) ERC20(_name, _symbol) {
-        _mint(msg.sender, _totalSupply * 10**18);
+        // _mint(msg.sender, _totalSupply * 10**18);
+        _mint(msg.sender, _totalSupply);
     }
 }

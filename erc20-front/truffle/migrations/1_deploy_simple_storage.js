@@ -2,6 +2,7 @@ const Erc20Token = artifacts.require("Erc20Token");
 const Sale = artifacts.require("Sale");
 
 module.exports = async function (deployer, network, accounts) {
+  const [deployerAddress, walletAddress] = accounts;
   /*
   network : 사용하고 있는 네트워크 정보
   accounts : 네트워크의 계정 갯수
@@ -23,11 +24,14 @@ module.exports = async function (deployer, network, accounts) {
   deployer.deploy(
     Sale,
     1,
-    accounts[0],
+    // accounts[0],
+    walletAddress,
     DOToken.address,
     hardCap,
     openingTime,
-    closingTime
+    closingTime,
+    // accounts[0]
+    deployerAddress
   );
 };
 
