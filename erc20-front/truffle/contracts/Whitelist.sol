@@ -15,7 +15,11 @@ contract Whitelist is Ownable{
         myWhitelist[_addr] = true;
     }
 
-    function removeMyWhitelist(address _addr) public onlyOwner(){
+    function _removeMyWhitelist(address _addr) internal{
         myWhitelist[_addr] = false;
+    }
+
+    function removeMyWhitelist(address _addr) public onlyOwner(){
+        _removeMyWhitelist(_addr);
     }
 }

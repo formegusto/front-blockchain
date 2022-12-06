@@ -32,13 +32,23 @@ contract Sale is Crowdsale, Whitelist, Cap, TimedCrowdsale {
         uint256 _weiAmount
     ) 
         internal 
-        view 
         override 
+        view 
         isMyWhitelisted(_beneficiary) 
         onlyWhileOpen 
     {       
         super._preValidatePurchase(_beneficiary, _weiAmount);
         require(weiRaised().add(_weiAmount) <= getCap(), "CappedCrowdsale: cap exceeded");
+    }
+
+    function _postValidatePurchase2(
+        address beneficiary
+    ) 
+        internal 
+        virtual 
+        override
+    {
+        _removeMyWhitelist(beneficiary);
     }
 
     // Whitelist.sol이 Ownable을 상속받아서 OnlyOwner 사용가능

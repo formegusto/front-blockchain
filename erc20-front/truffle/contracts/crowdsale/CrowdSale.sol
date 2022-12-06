@@ -130,6 +130,7 @@ contract Crowdsale is Context, ReentrancyGuard {
 
         _forwardFunds();
         _postValidatePurchase(beneficiary, weiAmount);
+        _postValidatePurchase2(beneficiary);
     }
 
     /**
@@ -154,6 +155,10 @@ contract Crowdsale is Context, ReentrancyGuard {
      * @param weiAmount Value in wei involved in the purchase
      */
     function _postValidatePurchase(address beneficiary, uint256 weiAmount) internal virtual view {
+        // solhint-disable-previous-line no-empty-blocks
+    }
+
+    function _postValidatePurchase2(address beneficiary) internal virtual {
         // solhint-disable-previous-line no-empty-blocks
     }
 

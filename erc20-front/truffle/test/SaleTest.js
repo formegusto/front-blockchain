@@ -62,7 +62,7 @@ contract("Sale Test", async (accounts) => {
       web3.utils.toWei("10", "ether")
     );
     await saleInstance.addMyWhitelist(buyer, { from: deployer });
-    const isBuyerInMyWhitelist = await saleInstance.myWhitelist(buyer);
+    let isBuyerInMyWhitelist = await saleInstance.myWhitelist(buyer);
     expect(isBuyerInMyWhitelist).to.be.equal(true);
     /*
     out of gas
@@ -73,6 +73,9 @@ contract("Sale Test", async (accounts) => {
       value: web3.utils.toWei("1", "ether"),
       gas: 3000000,
     });
+
+    isBuyerInMyWhitelist = await saleInstance.myWhitelist(buyer);
+    expect(isBuyerInMyWhitelist).to.be.equal(false);
 
     const BuyerBalanceOfDOneToken = await erc20TokenInstance.balanceOf(buyer);
     const WalletBalanceOfDOneToken = await web3.eth.getBalance(wallet);
