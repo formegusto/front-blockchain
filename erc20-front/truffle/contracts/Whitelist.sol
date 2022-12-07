@@ -15,6 +15,11 @@ contract Whitelist is Ownable{
         myWhitelist[_addr] = true;
     }
 
+    function addMyWhitelist2(address[] memory _addr) public onlyOwner(){
+        for(uint i=0;i<_addr.length;i++)
+            myWhitelist[_addr[i]] = true;
+    }
+
     function _removeMyWhitelist(address _addr) internal{
         myWhitelist[_addr] = false;
     }

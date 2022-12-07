@@ -40,8 +40,11 @@ module.exports = async function (deployer, network, accounts) {
     web3.utils.toWei("10", "ether"),
     { from: deployerAddress }
   );
-  await saleInstance.addMyWhitelist(buyer1, { from: deployerAddress });
-  await saleInstance.addMyWhitelist(buyer2, { from: deployerAddress });
+  // await saleInstance.addMyWhitelist(buyer1, { from: deployerAddress });
+  // await saleInstance.addMyWhitelist(buyer2, { from: deployerAddress });
+  await saleInstance.addMyWhitelist2([buyer1, buyer2], {
+    from: deployerAddress,
+  });
 };
 
 // truffle migrate --reset
