@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useEth } from "../../contexts/EthContext";
 import Erc20Token from "../../contracts/Erc20Token.json";
+import CountDown from "./CountDown";
 
 function ERC20() {
   const [inputState, setInputState] = React.useState({});
@@ -76,13 +77,10 @@ function ERC20() {
     getEvent();
   }, [balance, getEvent]);
 
-  React.useEffect(() => {
-    console.log(transferEvent);
-  }, []);
-
   return (
     <Wrap>
       <h1>ERC20</h1>
+      <CountDown />
       <Content>
         {!account ? (
           <h2>please login</h2>

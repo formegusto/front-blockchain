@@ -16,9 +16,9 @@ module.exports = async function (deployer, network, accounts) {
   const DOToken = await Erc20Token.deployed();
   const hardCap = web3.utils.toWei("10", "ether");
 
-  let openingTime = new Date(2022, 11, 6, 15, 40, 00);
+  let openingTime = new Date(2022, 11, 7, 14, 00, 00);
   openingTime = Math.floor(openingTime.getTime() / 1000);
-  let closingTime = new Date(2022, 11, 6, 15, 45, 00);
+  let closingTime = new Date(2022, 11, 7, 17, 00, 00);
   closingTime = Math.floor(closingTime.getTime() / 1000);
 
   deployer.deploy(
