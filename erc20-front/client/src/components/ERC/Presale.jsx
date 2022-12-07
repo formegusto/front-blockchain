@@ -7,6 +7,7 @@ import Sale from "../../contracts/Sale.json";
 function CountDown({ web3, account }) {
   const [ercIns, setErcIns] = React.useState();
   const [saleIns, setSaleIns] = React.useState();
+  const [whitelist, setWhitelist] = React.useState("");
 
   const setUp = React.useCallback(async () => {
     if (web3) {
@@ -45,6 +46,18 @@ function CountDown({ web3, account }) {
     setUp();
   }, [setUp]);
 
+  const changeInput = React.useCallback((e) => {
+    setWhitelist(e.target.value);
+  }, []);
+
+  const enrollWhitelist = React.useCallback(() => {
+    if (account && saleIns)
+      saleIns.methods
+        .addMyWhitelist2(whitelist.split(","))
+        .send({ from: account });
+    // saleIns.methods.addMyWhitelist(whitelist).send({ from: account });
+  }, [saleIns, whitelist, account]);
+
   return (
     <>
       <StyledCountdown
@@ -52,6 +65,8 @@ function CountDown({ web3, account }) {
         value={new Date(2022, 11, 7, 17, 0, 0)}
       />
       <button onClick={buy}>buy for 1eth</button>
+      <input onChange={changeInput} value={whitelist} />
+      <button onClick={enrollWhitelist}>whitelist</button>
     </>
   );
 }
