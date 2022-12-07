@@ -59,7 +59,8 @@ contract("Sale Test", async (accounts) => {
 
     await erc20TokenInstance.approve(
       saleInstance.address,
-      web3.utils.toWei("10", "ether")
+      web3.utils.toWei("10", "ether"),
+      { from: deployer }
     );
     await saleInstance.addMyWhitelist(buyer, { from: deployer });
     let isBuyerInMyWhitelist = await saleInstance.myWhitelist(buyer);

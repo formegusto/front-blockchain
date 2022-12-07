@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { useEth } from "../../contexts/EthContext";
 import Erc20Token from "../../contracts/Erc20Token.json";
-import CountDown from "./CountDown";
+import CountDown from "./Presale";
 
 function ERC20() {
   const [inputState, setInputState] = React.useState({});
@@ -64,14 +64,14 @@ function ERC20() {
   const getEvent = React.useCallback(async () => {
     if (ins) {
       const information = await ins.getPastEvents("Transfer", {
-        filter: { from: account },
+        // filter: { from: account },
         fromBlock: 0,
         toBlock: "latest",
       });
       console.log(information);
       setTransferEvent(information.map((i) => i.returnValues));
     }
-  }, [ins, account]);
+  }, [ins]);
 
   React.useEffect(() => {
     getEvent();
@@ -80,7 +80,7 @@ function ERC20() {
   return (
     <Wrap>
       <h1>ERC20</h1>
-      <CountDown />
+      <CountDown web3={web3} account={account} />
       <Content>
         {!account ? (
           <h2>please login</h2>
