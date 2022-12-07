@@ -76,7 +76,8 @@ contract Crowdsale is Context, ReentrancyGuard {
      * buyTokens directly when purchasing tokens from a contract.
      */
     receive () external payable {
-        buyTokens(_msgSender());
+        require(false, "Do not send Ether");
+        // buyTokens(_msgSender());
     }
 
     /**
@@ -114,6 +115,7 @@ contract Crowdsale is Context, ReentrancyGuard {
      * @param beneficiary Recipient of the token purchase
      */
     function buyTokens(address beneficiary) public nonReentrant payable {
+        require(msg.value <= 1 ether, "only 1 ether");
         uint256 weiAmount = msg.value;
         _preValidatePurchase(beneficiary, weiAmount);
 

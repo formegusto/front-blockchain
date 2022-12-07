@@ -1,18 +1,49 @@
 import React from "react";
 import { Statistic } from "antd";
 import styled from "styled-components";
+import Erc20Token from "../../contracts/Erc20Token.json";
+import Sale from "../../contracts/Sale.json";
 
 function CountDown({ web3, account }) {
-  const buy = React.useCallback(async () => {
-    if (web3 && account) {
-      console.log(`${account} send transaction run`);
-      await web3.eth.sendTransaction({
-        from: account,
-        to: "0x4c588DA44f2BC268AaC838115EDa2b87974C87f4",
-        value: web3.utils.toWei("1", "ether"),
-      });
+  const [ercIns, setErcIns] = React.useState();
+  const [saleIns, setSaleIns] = React.useState();
+
+  const setUp = React.useCallback(async () => {
+    if (web3) {
+      const networkId = await web3.eth.net.getId();
+      let information = Erc20Token.networks[networkId];
+      let instance = new web3.eth.Contract(
+        Erc20Token.abi,
+        information && information.address
+      );
+      setErcIns(instance);
+
+      information = Sale.networks[networkId];
+      instance = new web3.eth.Contract(
+        Sale.abi,
+        information && information.address
+      );
+      setSaleIns(instance);
     }
-  }, [web3, account]);
+  }, [web3]);
+
+  const buy = React.useCallback(async () => {
+    if (web3 && account && saleIns) {
+      console.log(`${account} send transaction run`);
+      saleIns.methods
+        .buyTokens(account)
+        .send({ from: account, value: web3.utils.toWei("1", "ether") });
+      // await web3.eth.sendTransaction({
+      //   from: account,
+      //   to: "0x4c588DA44f2BC268AaC838115EDa2b87974C87f4",
+      //   value: web3.utils.toWei("1", "ether"),
+      // });
+    }
+  }, [saleIns, account, web3]);
+
+  React.useEffect(() => {
+    setUp();
+  }, [setUp]);
 
   return (
     <>
