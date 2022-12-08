@@ -11,6 +11,9 @@ contract Sale is Crowdsale, Whitelist, Cap, TimedCrowdsale {
     using SafeMath for uint256;
     IERC20 D_OneToken;
 
+    mapping(address => uint256) private _balances;
+    Safe private safe;
+
     constructor (
         uint256 rate_, 
         address payable wallet_, 
@@ -25,6 +28,7 @@ contract Sale is Crowdsale, Whitelist, Cap, TimedCrowdsale {
         TimedCrowdsale(_openingTime, _closingTime)
     {
         D_OneToken = token_;
+        safe = new Safe(address(this));
     }
 
     function _preValidatePurchase(
@@ -51,9 +55,36 @@ contract Sale is Crowdsale, Whitelist, Cap, TimedCrowdsale {
         _removeMyWhitelist(beneficiary);
     }
 
+    function _processPurchase(address beneficiary, uint256 tokenAmount) internal override {
+        _balances[beneficiary] = _balances[beneficiary].add(tokenAmount);
+        _deliverTokens(address(safe), tokenAmount);
+    }
+
+    function claim(address beneficiary) public {
+        require(hasClosed(), "PostDeliveryCrowdsale: not closed");
+        uint256 amount = _balances[beneficiary];
+        require(amount > 0, "PostDeliveryCrowdsale: beneficiary is not due any tokens");
+
+        _balances[beneficiary] = 0;
+        safe.transfer(token(), beneficiary, amount);
+    }
+
     // Whitelist.sol이 Ownable을 상속받아서 OnlyOwner 사용가능
     // function withDraw() external onlyOwner() {
     //     // Sale Smart Contract에 남은 잔여 ether를 모두 sender에게 재전송한다.
     //     D_OneToken.transfer(msg.sender, D_OneToken.balanceOf(address(this)));
     // }
+}
+
+contract Safe {
+    address deployer;
+
+    constructor(address _deployer) {
+        deployer = _deployer;
+    }
+
+    function transfer(IERC20 token, address to, uint256 amount) {
+        require(msg.sender == deplyer, "Only Sale smart contract can call this function");
+        token.transfer(to, amount);
+    }
 }
