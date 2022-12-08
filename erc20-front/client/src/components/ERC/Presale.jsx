@@ -33,7 +33,7 @@ function CountDown({ web3, account }) {
       console.log(`${account} send transaction run`);
       saleIns.methods
         .buyTokens(account)
-        .send({ from: account, value: web3.utils.toWei("1", "ether") });
+        .send({ from: account, value: web3.utils.toWei("0.00001", "ether") });
       // await web3.eth.sendTransaction({
       //   from: account,
       //   to: "0x4c588DA44f2BC268AaC838115EDa2b87974C87f4",
@@ -58,15 +58,23 @@ function CountDown({ web3, account }) {
     // saleIns.methods.addMyWhitelist(whitelist).send({ from: account });
   }, [saleIns, whitelist, account]);
 
+  const onClaim = React.useCallback(() => {
+    console.log(account);
+    if (saleIns && account) {
+      saleIns.methods.claim(account).send({ from: account });
+    }
+  }, [saleIns, account]);
+
   return (
     <>
       <StyledCountdown
         title="Pre-Sale Time"
         value={new Date(2022, 11, 7, 17, 0, 0)}
       />
-      <button onClick={buy}>buy for 1eth</button>
+      <button onClick={buy}>buy for 0.00001 eth</button>
       <input onChange={changeInput} value={whitelist} />
       <button onClick={enrollWhitelist}>whitelist</button>
+      <button onClick={onClaim}>onClaim</button>
     </>
   );
 }

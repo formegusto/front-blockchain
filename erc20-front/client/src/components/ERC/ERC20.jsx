@@ -18,6 +18,8 @@ function ERC20() {
     setAccount(accounts[0]);
     const networkId = await web3.eth.net.getId();
     const information = Erc20Token.networks[networkId];
+
+    console.log(Erc20Token);
     const instance = new web3.eth.Contract(
       Erc20Token.abi,
       information && information.address

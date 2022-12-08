@@ -83,8 +83,8 @@ contract Safe {
         deployer = _deployer;
     }
 
-    function transfer(IERC20 token, address to, uint256 amount) {
-        require(msg.sender == deplyer, "Only Sale smart contract can call this function");
+    function transfer(IERC20 token, address to, uint256 amount) public {
+        require(msg.sender == deployer, "Only Sale smart contract can call this function");
         token.transfer(to, amount);
     }
 }
